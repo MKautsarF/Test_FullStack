@@ -5,67 +5,54 @@ import { useNavigate } from "react-router-dom";
 import { loginInstructor, getProfile } from '../services/auth.services';
 
 import {
-  TextField
+  TextField, Dialog, DialogActions, DialogContent, DialogTitle, Button
 } from "@mui/material";
-
-// interface User {
-//   id: string;
-//   name: string;
-//   username: string; 
-//   email: string;
-//   division: string,
-//   position: string,
-//   IsAdmin: boolean,
-// }
 
 function Login() {
     const navigate = useNavigate();
     const [token, setToken] = useState('');
+    const [open, setOpen] = useState(false);
+    const [id, setId] = useState('');
+    const [isAdmin, setIsAdmin] = useState('');
 
-    // const [user, setUser] = useState<User>({
-    //   id: '',
-    //   name: '',
-    //   username: '',
-    //   email: '',
-    //   division: '',
-    //   position: '',
-    //   IsAdmin: false,
-    // });
+    const handleOpenDialog = () => {
+      setOpen(true); 
+    };
+  
+    const handleCloseDialog = () => {
+      setOpen(false); 
+    };
 
     const handleLogin= async (e: React.FormEvent<HTMLFormElement>) => {
 
       e.preventDefault(); 
       const formData = new FormData(e.currentTarget);
   
-      const username = formData.get("username") as string;
-      const password = formData.get("password") as string;
+      let username = formData.get("username") as string;
+      let password = formData.get("password") as string;
 
       try {
         const res = await loginInstructor(username, password);
         if (res.success) {
             sessionStorage.setItem('jwt', res);
-            navigate('/home'); 
+            setId(res.id);
+            setIsAdmin(res.isAdmin);
             console.log(res)
-            console.log(res.id)
-            
-            // const res2 = await getProfile(res.id);
-            // console.log(res2);
-            
-            // setUser({
-            //   id: res2.ID,
-            //   name: res2.Name,
-            //   username: res2.Username,
-            //   email: res2.EmailAddress,
-            //   division: res2.Division,
-            //   position: res2.Position,
-            //   IsAdmin: res2.IsAdmin,
-            // });
-            // console.log(user);
-      
+            console.log("id: "+res.id)
+            console.log("isAdmin: "+res.isAdmin)
+                  
             setToken(res);
-            navigate("/home", { state: { id: res.id } });
+
+            if(res.isAdmin == true){
+              handleOpenDialog();
+            } else  {
+              navigate("/home", { state: { id: res.id } });
+            }
+            
+            username = "";
+            password = "";
         } else {
-            alert('Invalid credentials'); // Show error for invalid credentials
+            alert('Invalid credentials');
         }
       }catch (error) {
         console.error(error);
@@ -78,15 +65,15 @@ function Login() {
       <>
         <div className="flex flex-col gap-10">
           <h1>Attendance App</h1>
-            <p>Please log in</p>
+            <p>Log in to do daily attendance</p>
             <form 
               onSubmit={handleLogin}
-              className="flex flex-col gap-4 justify-center ">
+              className="flex flex-col gap-6 justify-center ">
               <TextField 
                 label="username"
                 name="username"
                 required
-                value={"kautsar"}
+                // value={"kautsar"}
                 variant='standard'
                 fullWidth
                 sx={{
@@ -106,7 +93,7 @@ function Login() {
                   name="password"
                   required
                   variant='standard'
-                  value={"password"}
+                  // value={"kautsar"}
                   fullWidth
                   sx={{
                       backgroundColor: 'white', 
@@ -127,6 +114,24 @@ function Login() {
                 <button>Exit</button>
             </form>
         </div>
+        
+        <Dialog open={open} onClose={handleCloseDialog}>
+          <DialogTitle>Profile Data</DialogTitle>
+          <DialogContent>
+            You are a Admin! Do you wish to continue as Admin?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="error">
+              Close
+            </Button>
+            <Button onClick={() => {navigate("/home", { state: { id: id } })}} color="secondary">
+              No, Continue as Employee
+            </Button>
+            <Button onClick={() => {navigate("/homeAdmin", { state: { id: id } })}} color="primary">
+              Continue
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     )
   }

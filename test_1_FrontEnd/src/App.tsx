@@ -4,6 +4,7 @@ import { RouterProvider, createHashRouter } from "react-router-dom"
 
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import HomeAdmin from "./pages/HomeAdmin"
 
 const routerData = [
   {
@@ -13,6 +14,10 @@ const routerData = [
   {
     path: "/home",
     element: <Home />
+  },
+  {
+    path: "/homeAdmin",
+    element: <HomeAdmin />
   }
 ];
 

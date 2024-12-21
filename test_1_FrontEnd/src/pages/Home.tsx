@@ -1,9 +1,8 @@
 import { useState,useEffect,useRef  } from 'react'
 import '../App.css'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getProfile } from '../services/auth.services';
 import { postAttendance } from '../services/attendance.service';
-
 
 import {
   Button,Dialog, DialogActions, DialogContent, DialogTitle
@@ -20,11 +19,13 @@ interface User {
 }
 
 function Home() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = location.state || {}; 
   // console.log("Received ID:", id);
 
   const [user, setUser] = useState<User | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -53,8 +54,6 @@ function Home() {
     }
   }, [user]);
 
-  const [open, setOpen] = useState(false);
-
   const handleOpenDialog = () => {
     setOpen(true); 
   };
@@ -62,6 +61,7 @@ function Home() {
   const handleCloseDialog = () => {
     setOpen(false); 
   };
+  
   const [time, setTime] = useState('');
 
   const updateTime = () => {
@@ -114,6 +114,9 @@ function Home() {
     }
   };
 
+  const handleLogout = () => {
+    navigate("/");
+  };
 
   return (
     <>
@@ -123,7 +126,17 @@ function Home() {
           <Button onClick={handleOpenDialog}>profile data</Button>
         </div>
         <p>Today date is: {day}, {date}, {time}</p>
-        <Button variant='contained' onClick={handleButtonClick}>Attend</Button>
+        <div className="flex flex-box justify-center ">
+          <Button variant='contained' onClick={handleButtonClick} style={{ width: '250px' }} >Attend</Button>
+        </div>
+        <div className="absolute bottom-0 left-20 p-12">
+          <Button 
+          variant='contained' 
+          color = 'error'
+          onClick={handleLogout} 
+          // style={{ width: '250px' }} 
+          >Log Out</Button>
+        </div>
       </div>
 
       <input

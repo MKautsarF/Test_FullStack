@@ -14,7 +14,7 @@ const upload = multer({ storage: storage });
 const dbConfig = {
     user: 'postgres',
     host: '127.0.0.1',
-    password: 'gravityfalls', 
+    password: '12345678', 
     port: 5432,
     database: "Attendance_1"
 }
@@ -233,7 +233,7 @@ app.post('/PostAttendance', upload.single('File'), async (req, res) => {
             user: 'postgres',
             host: '127.0.0.1',
             database: 'Attendance_1',
-            password: 'gravityfalls',
+            password: '12345678',
             port: 5432,
         });
 
