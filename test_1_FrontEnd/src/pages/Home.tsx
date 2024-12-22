@@ -126,7 +126,7 @@ function Home() {
           <Button onClick={handleOpenDialog}>profile data</Button>
         </div>
         <p>Today date is: {day}, {date}, {time}</p>
-        <div className="flex flex-box justify-center ">
+        <div className="flex flex-box justify-center items-center">
           <Button variant='contained' onClick={handleButtonClick} style={{ width: '250px' }} >Attend</Button>
         </div>
         <div className="absolute bottom-0 left-20 p-12">

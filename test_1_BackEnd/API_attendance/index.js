@@ -11,10 +11,12 @@ app.use(cors());
 app.use( express.json())
 const upload = multer({ storage: storage });
 
+
 const dbConfig = {
     user: 'postgres',
     host: '127.0.0.1',
-    password: '12345678', 
+    // password: '12345678', 
+    password: 'gravityfalls', 
     port: 5432,
     database: "Attendance_1"
 }
@@ -52,7 +54,7 @@ async function setupDatabase() {
 
         const createTableEmployeeQuery = `
             CREATE TABLE IF NOT EXISTS "Employee" (
-                "ID" VARCHAR(255) PRIMARY KEY,
+                "ID" SERIAL PRIMARY KEY, 
                 "Name" VARCHAR(255) NOT NULL,
                 "Username" VARCHAR(255) NOT NULL UNIQUE,
                 "Password" VARCHAR(255) NOT NULL,
@@ -68,7 +70,7 @@ async function setupDatabase() {
         const createTableAttendanceLogQuery = `
             CREATE TABLE IF NOT EXISTS "AttendanceLog" (
                 "ID" SERIAL PRIMARY KEY, 
-                "EmployeeID" VARCHAR(255) NOT NULL,
+                "EmployeeID" SERIAL NOT NULL,
                 "EmployeeName" VARCHAR(255),
                 "Date" DATE NOT NULL,
                 "Hour" TIME NOT NULL,
@@ -233,7 +235,8 @@ app.post('/PostAttendance', upload.single('File'), async (req, res) => {
             user: 'postgres',
             host: '127.0.0.1',
             database: 'Attendance_1',
-            password: '12345678',
+            // password: '12345678',
+            password: 'gravityfalls',
             port: 5432,
         });
 
@@ -260,5 +263,238 @@ app.post('/PostAttendance', upload.single('File'), async (req, res) => {
     }
 });
 
+app.get('/allEmployees', async (req, res) => {
+    const { page = 1, size = 10 } = req.query;
 
+    const limit = parseInt(size, 10);
+    const offset = (parseInt(page, 10) - 1) * limit;
+
+    const client = new Client(dbConfig);
+    
+    try {
+        await client.connect();
+        
+        const query = `
+            SELECT "ID", "Name", "Username", "EmailAddress", "Division", "Position", "IsAdmin"
+            FROM "Employee"
+            LIMIT $1 OFFSET $2;
+        `;
+        
+        const result = await client.query(query, [limit, offset]);
+
+        const countQuery = `SELECT COUNT(*) FROM "Employee"`;
+        const countResult = await client.query(countQuery);
+
+        res.json({
+            total: countResult.rows[0].count,
+            page: parseInt(page, 10),
+            size: limit,
+            data: result.rows,
+        });
+    } catch (error) {
+        console.error('Error fetching employees:', error);
+        res.status(500).json({ error: 'Failed to fetch employees' });
+    } finally {
+        await client.end();
+    }
+});
+
+app.put('/editProfile/:id', async (req, res) => {
+    const userId = req.params.id;
+    const { Name, Username, Password, EmailAddress, Division, Position, IsAdmin } = req.body;
+
+    if (!userId) {
+        return res.status(400).send({
+            success: false,
+            message: 'User ID is required',
+        });
+    }
+
+    if (!Name || !Username || !Password|| !EmailAddress || !Division || !Position) {
+        return res.status(400).send({
+            success: false,
+            message: 'All fields (Name, Username, Password, EmailAddress, Division, Position) are required to update the profile',
+        });
+    }
+
+    const client = new Client(dbConfig);
+    try {
+        await client.connect();
+ 
+        const query = `
+            UPDATE "Employee"
+            SET "Name" = $1, "Username" = $2, "Password" = $3,"EmailAddress" = $4, "Division" = $5, "Position" = $6, "IsAdmin" = $7
+            WHERE "ID" = $8
+            RETURNING "ID", "Name", "Username", "Password" ,"EmailAddress", "Division", "Position", "IsAdmin";
+        `;
+
+        const values = [Name, Username, Password, EmailAddress, Division, Position, IsAdmin, userId];
+        const result = await client.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        const updatedUser = result.rows[0];
+        return res.status(200).send({
+            success: true,
+            message: 'User profile updated successfully',
+            data: updatedUser,
+        });
+
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server error',
+        });
+    } finally {
+        await client.end();
+    }
+});
   
+app.post('/addProfile', async (req, res) => {
+    const { Name, Username, Password, EmailAddress, Division, Position, IsAdmin } = req.body;
+
+    // Check if all required fields are provided
+    if (!Name || !Username || !Password || !EmailAddress || !Division || !Position || IsAdmin === undefined) {
+        return res.status(400).send({
+            success: false,
+            message: 'All fields are required',
+        });
+    }
+
+    const client = new Client(dbConfig);
+    try {
+        await client.connect();
+
+        // Insert a new employee into the database
+        const query = `
+            INSERT INTO "Employee" ("Name", "Username", "Password", "EmailAddress", "Division", "Position", "IsAdmin")
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING "ID";
+        `;
+        const values = [Name, Username, Password, EmailAddress, Division, Position, IsAdmin];
+
+        const result = await client.query(query, values);
+
+        // Assuming the "ID" is auto-incremented, we return the new employee ID
+        const newEmployeeId = result.rows[0].ID;
+
+        return res.status(201).send({
+            success: true,
+            message: 'New employee added successfully',
+            data: { ID: newEmployeeId, Name, Username, Password, EmailAddress, Division, Position, IsAdmin },
+        });
+
+    } catch (error) {
+        console.error('Error adding new employee:', error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server error',
+        });
+    } finally {
+        await client.end();
+    }
+});
+
+app.delete('/deleteProfile/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    // Validate the ID
+    if (!userId) {
+        return res.status(400).send({
+            success: false,
+            message: 'Profile ID is required',
+        });
+    }
+
+    const client = new Client(dbConfig);
+    try {
+        await client.connect();
+
+        const query = `DELETE FROM "Employee" WHERE "ID" = $1 RETURNING "ID";`;
+        const result = await client.query(query, [userId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'Profile not found',
+            });
+        }
+
+        return res.status(200).send({
+            success: true,
+            message: 'Profile deleted successfully',
+            data: { ID: result.rows[0].ID },
+        });
+
+    } catch (error) {
+        console.error('Error deleting profile:', error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server error',
+        });
+    } finally {
+        await client.end();
+    }
+});
+
+app.get('/employeeAttendanceLog/:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+
+    // Check if employeeId is provided
+    if (!employeeId) {
+        return res.status(400).send({
+            success: false,
+            message: 'Employee ID is required',
+        });
+    }
+
+    const client = new Client(dbConfig);
+    try {
+        await client.connect();
+
+        // Query to get all attendance logs for the specific employee
+        const query = `
+            SELECT "ID", "EmployeeID", "EmployeeName", "Date", "Hour", "File"
+            FROM "AttendanceLog"
+            WHERE "EmployeeID" = $1
+            ORDER BY "Date" DESC;
+        `;
+
+        const result = await client.query(query, [employeeId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'No attendance records found for this employee',
+            });
+        }
+
+        // Convert the file buffer into base64 string for frontend rendering
+        const attendanceLogs = result.rows.map(log => ({
+            ...log,
+            File: log.File ? `data:image/jpeg;base64,${log.File.toString('base64')}` : null
+        }));
+
+        // Return the attendance logs
+        return res.status(200).send({
+            success: true,
+            message: 'Attendance logs retrieved successfully',
+            data: attendanceLogs,
+        });
+
+    } catch (error) {
+        console.error('Error retrieving attendance logs:', error);
+        return res.status(500).send({
+            success: false,
+            message: 'Internal server error',
+        });
+    } finally {
+        await client.end();
+    }
+});

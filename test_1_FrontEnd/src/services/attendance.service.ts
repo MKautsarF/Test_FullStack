@@ -24,3 +24,15 @@ export const postAttendance = async (id: string, date: string, hour: string, fil
         throw new Error('Failed to post attendance');
       }
 };
+
+export const employeeAttendanceLog = async (id: string) => {
+  try {
+    const res = await services.get(`/employeeAttendanceLog/${id}`);
+
+    return res.data;
+
+  }catch(error) {
+    console.error(`Error getting employee's attendance log:`, error);
+    throw new Error('Failed to get attendance log');
+  }
+}

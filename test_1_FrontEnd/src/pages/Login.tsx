@@ -68,7 +68,7 @@ function Login() {
             <p>Log in to do daily attendance</p>
             <form 
               onSubmit={handleLogin}
-              className="flex flex-col gap-6 justify-center ">
+              className="flex flex-col gap-6 justify-center items-center">
               <TextField 
                 label="username"
                 name="username"
