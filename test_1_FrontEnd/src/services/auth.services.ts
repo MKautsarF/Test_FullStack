@@ -2,8 +2,8 @@ import services from ".";
 
 export const loginInstructor = async (username: string, password: string) => {
   const res = await services.post("/Authorization", {
-    Username: username,  // Change to match backend casing
-    Password: password,  // Change to match backend casing
+    Username: username,
+    Password: password,
   });
 
   services.defaults.headers.common["Authorization"] = `Bearer ${res.data}`;
@@ -12,9 +12,9 @@ export const loginInstructor = async (username: string, password: string) => {
 };
 
 export const getProfile = async (id: string) => {
-    const res = await services.get(`/profile/${id}`);
-  
-    return res.data;
+  const res = await services.get(`/profile/${id}`);
+
+  return res.data;
 };
 
 export const fetchAllEmployees = async (page: number, size: number) => {
@@ -25,18 +25,6 @@ export const fetchAllEmployees = async (page: number, size: number) => {
 export interface User {
   ID: string;
   Name: string;
-  EmailAddress: string;
-  Division: string;
-  Position: string;
-}
-
-export const updateProfile = async (userData: User) => {
-  const res = await services.put(`/editProfile/${userData.ID}`, userData);
-  return res.data;
-};
-
-export interface newUser {
-  Name: string;
   Username: string;
   Password: string;
   EmailAddress: string;
@@ -45,7 +33,12 @@ export interface newUser {
   IsAdmin: boolean;
 }
 
-export const addProfile = async (userData: newUser) => {
+export const updateProfile = async (userData: User) => {
+  const res = await services.put(`/editProfile/${userData.ID}`, userData);
+  return res.data;
+};
+
+export const addProfile = async (userData: User) => {
   const res = await services.post(`/addProfile`, userData);
   return res.data;
 };

@@ -1,35 +1,35 @@
-import { useEffect } from 'react'
-import './App.css'
-import { RouterProvider, createHashRouter } from "react-router-dom"
+import { useEffect } from "react";
+import "./App.css";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import HomeAdmin from "./pages/HomeAdmin"
-import EmployeeAttendaceLog from './pages/EmployeeAttendaceLog'
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import HomeAdmin from "./pages/HomeAdmin";
+import EmployeeAttendaceLog from "./pages/EmployeeAttendaceLog";
 
 const routerData = [
   {
     path: "/",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "/home",
-    element: <Home />
+    element: <Home />,
   },
   {
     path: "/homeAdmin",
-    element: <HomeAdmin />
+    element: <HomeAdmin />,
   },
   {
     path: "//homeAdmin/AttendanceLog",
-    element: <EmployeeAttendaceLog />
-  }
+    element: <EmployeeAttendaceLog />,
+  },
 ];
 
 const router = createHashRouter(
   routerData.map((route) => ({
     ...route,
-    element: route.element
+    element: route.element,
   }))
 );
 
@@ -37,13 +37,12 @@ function App() {
   useEffect(() => {}, []);
 
   return (
-    
     <>
       <main className="">
-      <RouterProvider router={router} />
-    </main>
+        <RouterProvider router={router} />
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
