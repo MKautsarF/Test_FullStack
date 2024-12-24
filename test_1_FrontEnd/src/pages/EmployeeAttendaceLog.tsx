@@ -107,7 +107,7 @@ function EmployeeAttendaceLog() {
     <>
       <div className="flex flex-col gap-4">
         <div className="flex flex-grow ">
-          <p>
+          <p className="text-color">
             {user
               ? `${user.Name}'s Attendance Log: `
               : "Loading user information..."}
@@ -117,7 +117,7 @@ function EmployeeAttendaceLog() {
           <TableContainer component={Paper}>
             <Table
               stickyHeader
-              aria-label="List of Employee"
+              aria-label="Employee Attendance Log"
               style={{ minWidth: "800px" }}
             >
               <colgroup>
@@ -128,27 +128,61 @@ function EmployeeAttendaceLog() {
               </colgroup>
               <TableHead>
                 <TableRow>
-                  <TableCell>No.</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Hour</TableCell>
-                  <TableCell>Photo</TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">No.</p>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">Date</p>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">Hour</p>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">Photo</p>
+                  </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                style={{
+                  backgroundColor: "#212121",
+                }}
+              >
                 {attendanceLogs.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4} style={{ textAlign: "center" }}>
-                      No data to be shown
+                      <p className="text-color">No data to be shown</p>
                     </TableCell>
                   </TableRow>
                 ) : (
                   attendanceLogs.map((log, index) => (
                     <TableRow key={log.ID}>
-                      <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        {log.Date ? formatDate(log.Date) : "N/A"}
+                        <p className="text-color">{index + 1}</p>
                       </TableCell>
-                      <TableCell>{log.Hour}</TableCell>
+                      <TableCell>
+                        <p className="text-color">
+                          {log.Date ? formatDate(log.Date) : "N/A"}
+                        </p>
+                      </TableCell>
+                      <TableCell>
+                        <p className="text-color">{log.Hour}</p>
+                      </TableCell>
                       <TableCell>
                         {log.File ? (
                           <img
@@ -157,7 +191,7 @@ function EmployeeAttendaceLog() {
                             style={{ width: "100px", height: "100px" }}
                           />
                         ) : (
-                          <p>No image</p>
+                          <p className="text-color">No image</p>
                         )}
                       </TableCell>
                     </TableRow>
@@ -174,20 +208,13 @@ function EmployeeAttendaceLog() {
             page={page - 1}
             onPageChange={(event, newPage) => setPage(newPage + 1)}
             onRowsPerPageChange={(event) =>
-              setPageSize(parseInt(event.target.value, 10))
+              setPageSize(parseInt(event.target.value, 5))
             }
-            sx={{
-              backgroundColor: "white",
-              color: "black",
-              "& .MuiTablePagination-select": {
-                backgroundColor: "white",
-                color: "black",
-              },
-              "& .MuiTablePagination-actions": {
-                color: "black",
-              },
+            style={{
+              backgroundColor: "#212121",
+              color: "#f9f7f7",
             }}
-          />
+          ></TablePagination>
         </div>
         <div className="absolute bottom-0 left-20 p-12">
           <button

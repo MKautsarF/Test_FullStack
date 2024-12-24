@@ -60,13 +60,75 @@
 
 .buttonCancel-template {
   color: #f9f7f7;
-  border: 1px solid #800a14;
-  background-color: #ff1427;
+  border: 1px solid #b30045;
+  background-color: #ff0063;
   transition: all 0.3s ease;
 }
 
 .buttonCancel-template:hover {
-  border-color: #ff1427;
+  border-color: #ff0063;
   color: #f9f7f7;
-  background-color: #800a14;
+  background-color: #b30045;
+}
+
+.buttonCancelContent-template {
+  color: #f9f7f7;
+  border: 1px solid #ff0063;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.buttonCancelContent-template:hover {
+  border-color: #b30045;
+  color: #f9f7f7;
+  background-color: #ff0063;
+}
+
+.buttonContent-template {
+  color: #f9f7f7;
+  border: 1px solid #14ffec;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.buttonContent-template:hover {
+  border-color: #0d7377;
+  color: #212121;
+  background-color: #14ffec;
+}
+
+.buttonCancelDialog-template {
+  color: #ff0063;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.buttonCancelDialog-template:hover {
+  color: #ff0063;
+  border-color: #ff0063;
+  background-color: transparent;
+}
+
+.buttonDialog-template {
+  color: #14ffec;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.buttonDialog-template:hover {
+  color: #14ffec;
+  border-color: #14ffec;
+  background-color: transparent;
+}
+
+.buttonMidDialog-template {
+  color: #bc6ff1;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.buttonMidDialog-template:hover {
+  color: #bc6ff1;
+  border-color: #bc6ff1;
+  background-color: transparent;
 }

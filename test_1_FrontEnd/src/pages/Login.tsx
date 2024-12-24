@@ -62,8 +62,8 @@ function Login() {
   return (
     <>
       <div className="flex flex-col gap-10">
-        <h1>Attendance App</h1>
-        <p>Log in to do daily attendance</p>
+        <h1 className="text-color">Attendance App</h1>
+        <p className="text-color">Log in to do daily attendance</p>
         <form
           onSubmit={handleLogin}
           className="flex flex-col gap-6 justify-center items-center"
@@ -76,14 +76,20 @@ function Login() {
             variant="standard"
             fullWidth
             sx={{
-              backgroundColor: "white",
+              backgroundColor: "#f9f7f7",
               borderRadius: 3,
               paddingY: 1,
               paddingX: 1,
             }}
             InputLabelProps={{
               style: {
+                color: "#0D7377",
                 padding: "5px 10px",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#212121",
               },
             }}
           ></TextField>
@@ -95,53 +101,88 @@ function Login() {
             // value={"kautsar"}
             fullWidth
             sx={{
-              backgroundColor: "white",
+              backgroundColor: "#f9f7f7",
               borderRadius: 3,
               paddingY: 1,
               paddingX: 1,
             }}
             InputLabelProps={{
               style: {
+                color: "#0D7377",
                 padding: "5px 10px",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#212121",
               },
             }}
           ></TextField>
           <button
+            className="button-template"
             type="submit"
+            style={{ minWidth: "450px" }}
             // onClick={() => {handleLogin("kautsar","password");}}
           >
-            Log In
+            LOG IN
           </button>
-          <button>Exit</button>
+          <button
+            className="buttonCancel-template"
+            style={{ minWidth: "450px" }}
+          >
+            EXIT
+          </button>
         </form>
       </div>
 
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>Log in as an Admin?</DialogTitle>
-        <DialogContent>
-          You are an Admin! Do you wish to continue as an Admin?
+        <DialogTitle
+          style={{
+            fontWeight: "bold",
+            backgroundColor: "#323232",
+            color: "#14FFEC",
+          }}
+        >
+          Log in as an Admin?
+        </DialogTitle>
+        <DialogContent
+          style={{
+            backgroundColor: "#323232",
+            color: "#f9f7f7",
+          }}
+        >
+          <p className="text-color">
+            You are an Admin! Do you wish to continue as an Admin?
+          </p>
         </DialogContent>
-        <DialogActions>
-          <div className="flex justify-between w-full ">
-            <Button onClick={handleCloseDialog} color="error">
-              Close
-            </Button>
-            <Button
+        <DialogActions
+          style={{
+            backgroundColor: "#323232",
+          }}
+        >
+          <div className="flex justify-between items-center w-full ">
+            <button
+              onClick={handleCloseDialog}
+              className="buttonCancelDialog-template"
+            >
+              Cancel
+            </button>
+            <button
               onClick={() => {
                 navigate("/home", { state: { id: id } });
               }}
-              color="secondary"
+              className="buttonMidDialog-template"
             >
               No, Continue as Employee
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => {
                 navigate("/homeAdmin", { state: { id: id } });
               }}
-              color="primary"
+              className="buttonDialog-template"
             >
               Continue
-            </Button>
+            </button>
           </div>
         </DialogActions>
       </Dialog>

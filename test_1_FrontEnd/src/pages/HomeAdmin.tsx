@@ -294,10 +294,10 @@ function HomeAdmin() {
         title={
           user ? `Welcome, admin: ${user.Name}` : "Loading user information..."
         }
-        subtitle="Profile"
+        subtitle="PROFILE"
         user={user}
         // subtitle2="Attendance Log"
-        subtitle3="Add New Employee"
+        subtitle3="ADD NEW EMPLOYEES"
         from="homeAdmin"
       ></Header>
       <div className="flex flex-col gap-4">
@@ -314,20 +314,21 @@ function HomeAdmin() {
           </Button>
         </div> */}
         <div className="flex justify-between flex-grow justify-center items-center gap-6">
-          <p>List of Employees:</p>
-          <p>
+          <p className="text-color">List of Employees:</p>
+          <p className="text-color">
             {day}, {formatDate(dateNow)}. {time}
           </p>
         </div>
         <div className="absolute bottom-0 left-16 p-12 z-50">
-          <Button
-            variant="contained"
+          <button
+            className="buttonCancel-template"
+            // variant="contained"
             color="error"
             onClick={handleLogout}
             // style={{ width: '250px' }}
           >
-            Log Out
-          </Button>
+            LOG OUT
+          </button>
         </div>
         <div className="flex flex-col w-full">
           <TableContainer component={Paper}>
@@ -343,16 +344,44 @@ function HomeAdmin() {
               </colgroup>
               <TableHead>
                 <TableRow>
-                  <TableCell>No.</TableCell>
-                  <TableCell>Employee's Name</TableCell>
-                  <TableCell>Details</TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">No.</p>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">Employee's Name</p>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      backgroundColor: "#212121",
+                    }}
+                  >
+                    <p className="text-color">Details</p>
+                  </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody
+                style={{
+                  backgroundColor: "#212121",
+                }}
+              >
                 {employees.map((employee, index) => (
                   <TableRow key={employee.ID}>
-                    <TableCell>{(page - 1) * pageSize + index + 1}</TableCell>
-                    <TableCell>{employee.Name}</TableCell>
+                    <TableCell>
+                      <p className="text-color">
+                        {(page - 1) * pageSize + index + 1}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-color">{employee.Name}</p>
+                    </TableCell>
                     <TableCell
                       style={{
                         display: "flex",
@@ -361,8 +390,9 @@ function HomeAdmin() {
                         paddingRight: "2rem",
                       }}
                     >
-                      <Button
-                        variant="outlined"
+                      <button
+                        className="buttonContent-template"
+                        // variant="outlined"
                         onClick={() =>
                           navigate("/homeAdmin/AttendanceLog", {
                             state: {
@@ -374,20 +404,22 @@ function HomeAdmin() {
                         }
                       >
                         View Attendance
-                      </Button>
-                      <Button
-                        variant="outlined"
+                      </button>
+                      <button
+                        className="buttonContent-template"
+                        // variant="outlined"
                         onClick={() => handleOpenDialogEdit(employee.ID)}
                       >
                         Edit
-                      </Button>
-                      <Button
-                        color="error"
-                        variant="outlined"
+                      </button>
+                      <button
+                        className="buttonCancelContent-template"
+                        // color="error"
+                        // variant="outlined"
                         onClick={() => handleDeleteButtonClick(employee.ID)}
                       >
                         Delete
-                      </Button>
+                      </button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -402,82 +434,165 @@ function HomeAdmin() {
             page={page - 1}
             onPageChange={(event, newPage) => setPage(newPage + 1)}
             onRowsPerPageChange={(event) =>
-              setPageSize(parseInt(event.target.value, 10))
+              setPageSize(parseInt(event.target.value, 5))
             }
-            sx={{
-              backgroundColor: "white",
-              color: "black",
-              "& .MuiTablePagination-select": {
-                backgroundColor: "white",
-                color: "black",
-              },
-              "& .MuiTablePagination-actions": {
-                color: "black",
-              },
+            style={{
+              backgroundColor: "#212121",
+              color: "#f9f7f7",
             }}
           />
         </div>
       </div>
 
       <Dialog open={openEdit} onClose={handleCloseDialogEdit}>
-        <DialogTitle>Edit Profile Data</DialogTitle>
-        <DialogContent>
+        <DialogTitle
+          style={{
+            fontWeight: "bold",
+            backgroundColor: "#323232",
+            color: "#14FFEC",
+          }}
+        >
+          Edit Profile Data
+        </DialogTitle>
+        <DialogContent
+          style={{
+            backgroundColor: "#323232",
+            color: "#f9f7f7",
+          }}
+        >
           <TextField
             label="Employee ID"
+            required
             name="ID"
             value={user2?.ID || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
             disabled
           />
           <TextField
             label="Employee Name"
+            required
             name="Name"
             value={user2?.Name || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Username"
+            required
             name="Username"
             value={user2?.Username || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Password"
+            required
             name="Password"
             value={user2?.Password || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Email"
+            required
             name="EmailAddress"
             value={user2?.EmailAddress || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Division"
+            required
             name="Division"
             value={user2?.Division || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Position"
+            required
             name="Position"
             value={user2?.Position || ""}
             onChange={handleChange}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <FormControlLabel
             control={
@@ -489,19 +604,34 @@ function HomeAdmin() {
                     IsAdmin: event.target.checked,
                   });
                 }}
-                color="primary"
+                sx={{
+                  color: "#f9f7f7",
+                  "&.Mui-checked": {
+                    color: "#14ffec",
+                  },
+                }}
               />
             }
             label="Is Admin"
+            sx={{
+              color: userAdd.IsAdmin ? "#14ffec" : "#f9f7f7",
+            }}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialogEdit} color="primary">
-            Close
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
+        <DialogActions
+          style={{
+            backgroundColor: "#323232",
+          }}
+        >
+          <button
+            onClick={handleCloseDialogEdit}
+            className="buttonCancelDialog-template"
+          >
+            CLOSE
+          </button>
+          <button onClick={handleSave} className="buttonDialog-template">
+            EDIT
+          </button>
         </DialogActions>
       </Dialog>
 
@@ -600,17 +730,39 @@ function HomeAdmin() {
         </Dialog> */}
 
       <Dialog open={deleteDialogOpen} onClose={cancelDelete}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <p>Are you sure you want to delete this profile?</p>
+        <DialogTitle
+          style={{
+            fontWeight: "bold",
+            backgroundColor: "#323232",
+            color: "#14FFEC",
+          }}
+        >
+          Confirm Deletion
+        </DialogTitle>
+        <DialogContent
+          style={{
+            backgroundColor: "#323232",
+            color: "#f9f7f7",
+          }}
+        >
+          <p className="text-color">
+            Are you sure you want to delete this profile?
+          </p>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelDelete} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmDelete} color="error">
-            Confirm
-          </Button>
+        <DialogActions
+          style={{
+            backgroundColor: "#323232",
+          }}
+        >
+          <button onClick={cancelDelete} className="buttonDialog-template">
+            CANCEL
+          </button>
+          <button
+            onClick={confirmDelete}
+            className="buttonCancelDialog-template"
+          >
+            DELETE
+          </button>
         </DialogActions>
       </Dialog>
     </>

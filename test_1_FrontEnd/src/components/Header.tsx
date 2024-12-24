@@ -123,7 +123,18 @@ const Header: React.FC<HeaderProps> = ({
       }}
     >
       <div className=" flex justify-between items-center w-full px-4 gap-4">
-        <h1 style={{ fontSize: "1.25rem", margin: 0, color: textColor }}>
+        <h1
+          style={{
+            fontSize: "1.25rem",
+            margin: 0,
+            color:
+              from === "home"
+                ? "textColor"
+                : from === "homeAdmin"
+                ? "#14ffec"
+                : "textColor",
+          }}
+        >
           {title}
         </h1>
         <div className="flex gap-4 ml-auto items-center ">
@@ -173,7 +184,6 @@ const Header: React.FC<HeaderProps> = ({
             color: "#14FFEC",
           }}
         >
-          {" "}
           Profile Data
         </DialogTitle>
         <DialogContent
@@ -207,58 +217,139 @@ const Header: React.FC<HeaderProps> = ({
       </Dialog>
 
       <Dialog open={openAdd} onClose={handleCloseDialogAdd}>
-        <DialogTitle style={{ fontWeight: "bold" }}>
+        <DialogTitle
+          style={{
+            fontWeight: "bold",
+            backgroundColor: "#323232",
+            color: "#14FFEC",
+          }}
+        >
           Add New Employee Profile
         </DialogTitle>
-        <DialogContent>
+        <DialogContent
+          style={{
+            backgroundColor: "#323232",
+            color: "#f9f7f7",
+          }}
+        >
           <TextField
             label="Employee Name"
+            required
             name="Name"
             value={userAdd.Name}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
+            // sx={{
+            //   backgroundColor: "#f9f7f7",
+            //   borderRadius: 3,
+            // }}
           />
           <TextField
             label="Username"
+            required
             name="Username"
             value={userAdd.Username}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Password"
+            required
             // type="password"
             name="Password"
             value={userAdd.Password}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Email"
+            required
             name="EmailAddress"
             value={userAdd.EmailAddress}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Division"
+            required
             name="Division"
             value={userAdd.Division}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <TextField
             label="Employee Position"
+            required
             name="Position"
             value={userAdd.Position}
             onChange={handleChangeAdd}
             fullWidth
             margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#0D7377",
+              },
+            }}
+            InputProps={{
+              style: {
+                color: "#f9f7f7",
+              },
+            }}
           />
           <FormControlLabel
             control={
@@ -270,19 +361,37 @@ const Header: React.FC<HeaderProps> = ({
                     IsAdmin: event.target.checked,
                   });
                 }}
-                color="primary"
+                sx={{
+                  color: "#f9f7f7",
+                  "&.Mui-checked": {
+                    color: "#14ffec",
+                  },
+                }}
               />
             }
             label="Is Admin"
+            sx={{
+              color: userAdd.IsAdmin ? "#14ffec" : "#f9f7f7",
+            }}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialogAdd} color="primary">
-            Close
-          </Button>
-          <Button onClick={() => handleSaveAdd(userAdd)} color="primary">
-            Save
-          </Button>
+        <DialogActions
+          style={{
+            backgroundColor: "#323232",
+          }}
+        >
+          <button
+            onClick={handleCloseDialogAdd}
+            className="buttonCancelDialog-template"
+          >
+            CLOSE
+          </button>
+          <button
+            onClick={() => handleSaveAdd(userAdd)}
+            className="buttonDialog-template"
+          >
+            ADD
+          </button>
         </DialogActions>
       </Dialog>
     </header>
